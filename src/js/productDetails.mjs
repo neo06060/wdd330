@@ -27,7 +27,7 @@ export default class ProductDetails {
 
     const productForCart = {
       ...this.product,
-      FinalPrice: this.product.Price,
+      FinalPrice: this.product.FinalPrice, // ya está en JSON
     };
 
     cart.push(productForCart);
@@ -41,10 +41,17 @@ export default class ProductDetails {
     if (!this.product) return;
 
     document.getElementById("productName").textContent = this.product.Name;
-    document.getElementById("productDescription").textContent = this.product.Description;
-    document.getElementById("productPrice").textContent = `$${this.product.Price}`;
+    document.getElementById("productDescription").innerHTML =
+      this.product.DescriptionHtmlSimple || "";
+    document.getElementById("productPrice").textContent = `$${this.product.FinalPrice}`;
     document.getElementById("productImage").src = this.product.Image;
-    document.getElementById("productBrand").textContent = this.product.Brand || "";
-    document.getElementById("productColor").textContent = this.product.Color || "";
+
+    // Brand puede ser objeto o string
+    const brand = typeof this.product.Brand === "object" ? this.product.Brand.Name : this.product.Brand;
+    document.getElementById("productBrand").textContent = brand || "";
+
+    // Colors es un array
+    document.getElementById("productColor").textContent =
+      this.product.Colors?.[0]?.ColorName || "";
   }
 }
